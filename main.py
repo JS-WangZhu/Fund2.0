@@ -32,7 +32,7 @@ if __name__ == '__main__':
             return color.green(s1), color.green(s2)
         else:
             return color.white(s1), color.white(s2)
-    ggc = d.getGgCode()
+#     ggc = d.getGgCode()
     shangz_jg, shangz_zd, shenz_jg, shenz_zd, chuangyb_jg, chuangyb_zd = 0, 0, 0, 0, 0, 0
 
     sh = getGegu('sh000001')
