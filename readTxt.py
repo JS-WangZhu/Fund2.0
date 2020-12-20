@@ -5,7 +5,7 @@ class GetData():
         jj_codes = f.readlines()
         return jj_codes
 
-    def getGgCode(self):
-        f = open('my_gegu.txt', 'r', encoding='utf-8')
-        gg_codes = f.readlines()
-        return gg_codes
+#     def getGgCode(self):
+#         f = open('my_gegu.txt', 'r', encoding='utf-8')
+#         gg_codes = f.readlines()
+#         return gg_codes
