@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <title>index</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+
+    </script>
+</head>
+<body>
+    <div style="width: 80%;margin: 0 auto;" id="fdiv">
+        <div style="text-align: center;font-size: 30px;padding-top: 10px;">
+            我的基金自选
+        </div>
+    <div style="margin-top: 10px;">
+    <div style="float: left">
+    <button type="button" class="btn btn-primary" id="add">添加</button>&nbsp;&nbsp;
+    </div>
+        <div style="float: left">
+        <select class="form-control" id="user_select">
+            <option>wz</option>
+            <option>wzl</option>
+        </select>
+        </div>
+
+    <div style="float: right;">
+    <button type="button" class="btn btn-danger">批量删除</button>
+    </div>
+    </div>
+    <div style="text-align: center;margin-top: 55px;" id="tbdiv">
+
+
+
+      </div>
+      </div>
+    <script>
+        var basePath = 'http://localhost:50005/'
+
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+        }
+
+        $(function () {
+            $("#add").click(function () {
+            // alert(localUrl)
+            var user = $("#user_select").children('option:selected').val();
+            $(location).attr('href', "add.html?user="+user);
+        })
+
+        })
+        // 监听下拉变化
+        $(document).ready(function(){
+
+        $("#user_select").change(function () {
+            var user = $(this).children('option:selected').val();
+            $.get(basePath+'getFavor?user='+user,  function(result){
+                var jjid = ''
+                var jjname = ''
+                var final = ''
+                var raw = " <table class='table table-hover' id=\"info_tb\" style=\"left: 50%;top: 50%;\"> " +
+                    "<tr>\n" +
+                    "            <td><input type=\"checkbox\" class=\"tb_checkbox\" id=\"choose_all\"></td>\n" +
+                    "            <td>基金代码</td>\n" +
+                    "            <td>备注</td>\n" +
+                    "            <td>操作</td>\n" +
+                    "        </tr>"
+                final += raw
+                for (let r in result['response_body']) {
+                    var temp = generatetext(result['response_body'][r]['id'], result['response_body'][r]['name']);
+                    final+=temp;
+                }
+                final += "</table>"
+                // alert(final)
+                $("#info_tb").html(final)
+                $(function() {
+                    var i=0;
+                    //全选
+                    $("#choose_all").on("click",function(){
+                        if(i==0){
+                            //把所有复选框选中
+                            $(".tb_checkbox").prop("checked", true);
+                            i=1;
+                        }else{
+                            $(".tb_checkbox").prop("checked", false);
+                            i=0;
+                        }
+                    });
+                });
+                $("#tbdiv .delbutton").click(function(){
+                    var id = $(this).attr("id").substring(3,);
+                    if (confirm("确认要删除吗")){
+                        $.get(basePath+"delFavor?user="+user+"&jjid="+id, function(result){
+                            $(location).attr('href', "index.html");
+                        });
+                    }
+
+                });
+            })
+        })
+        })
+        $(document).ready(function () {
+            $("#info_tb").attr('class','table-hover table')
+        })
+        function generatetext(jjid, jjname) {
+                    var template = " <tr>\n" +
+                    "            <td><input type=\"checkbox\" class=\"tb_checkbox\"></td>\n" +
+                    "            <td>"+jjid+"</td>\n" +
+                    "            <td>"+jjname+"</td>\n" +
+                    "            <td><button type=\"button\" class=\"btn delbutton btn-danger\" id=\"del"+jjid+"\">删除</button></td>\n" +
+                    "        </tr>"
+                    return template
+                }
+
+
+    // 开启自加载
+    $(function (){
+            var user = getUrlParam('user');
+            if (user==null){
+                user = $("#user_select").children('option:selected').val();
+            }
+            $.get(basePath+'getFavor?user='+user,  function(result){
+                // console.log(result)
+                var final = ''
+                var raw = " <table class='table table-hover' id=\"info_tb\" style=\"left: 50%;top: 50%;\"> " +
+                    "<tr>\n" +
+                    "            <td><input type=\"checkbox\" class=\"tb_checkbox\" id=\"choose_all\"></td>\n" +
+                    "            <td>基金代码</td>\n" +
+                    "            <td>备注</td>\n" +
+                    "            <td>操作</td>\n" +
+                    "        </tr>"
+                final += raw
+                for (let r in result['response_body']) {
+                    var temp = generatetext(result['response_body'][r]['id'], result['response_body'][r]['name']);
+                    final+=temp;
+                }
+                final += "</table>"
+
+                // alert(final)
+                $("#tbdiv").html(final);
+                $(function() {
+                    var i=0;
+                    //全选
+                    $("#choose_all").on("click",function(){
+                        if(i==0){
+                            //把所有复选框选中
+                            $(".tb_checkbox").prop("checked", true);
+                            i=1;
+                        }else{
+                            $(".tb_checkbox").prop("checked", false);
+                            i=0;
+                        }
+                    });
+                 });
+                $("#tbdiv .delbutton").click(function(){
+                    var id = $(this).attr("id").substring(3,);
+                    if (confirm("确认要删除吗")){
+                        $.get(basePath+"delFavor?user="+user+"&jjid="+id, function(result){
+                            $(location).attr('href', "index.html");
+                        });
+                    }
+
+                });
+
+            })
+
+        })
+
+</script>
+</body>
+</html>

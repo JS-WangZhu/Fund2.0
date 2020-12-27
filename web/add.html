@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+</head>
+<body>
+ <div style="width: 80%;margin: 0 auto;">
+        <div style="text-align: center;font-size: 30px;padding-top: 10px;">
+            添加基金自选
+        </div>
+     <div>
+
+          <div class="form-group">
+            <label for="exampleInputEmail1">基金号码</label>
+            <input type="text" class="form-control" id="jjid" placeholder="基金号码">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">基金名称</label>
+            <input type="text" class="form-control" id="jjname" placeholder="基金名称">
+          </div>
+
+          <button class="btn btn-default" id="submit_button">Submit</button>
+
+     </div>
+ </div>
+<script>
+        var basePath = 'http://localhost:50005/'
+
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+        }
+       $("#submit_button").click(function () {
+            var user = getUrlParam('user');
+            var jjid = $("#jjid").val();
+            var jjname = $("#jjname").val();
+            if (user==null){
+                alert('非法访问')
+                $(location).attr('href', "index.html")
+            }else {
+                var requesturl = basePath+'addFavor?user=' + user + '&jjid=' + jjid + '&jjname=' + jjname;
+                $.get(requesturl, function (result) {
+                    if (result["response_code"]==200){
+                        alert("添加成功")
+                        $(location).attr('href', "index.html?user="+user)
+                    }else {
+                        alert("添加失败，请重试！")
+                        $(location).attr('href', "add.html?user="+user)
+                    }
+                });
+
+            }
+       })
+
+
+    </script>
+</body>
+</html>
