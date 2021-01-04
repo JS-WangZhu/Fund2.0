@@ -102,21 +102,23 @@ if __name__ == '__main__':
             if jj != False:
                 jjcode = i
                 name, guzhi, gutime = jj['name'], jj['gszzl'] + '%', jj['gztime']
-                guzhi = compareNum(guzhi, flag=0)
-                jingzhi = float(str(jj_jin).split('"')[1].split(',')[1])
-                jingzhip = float(str(jj_jin).split('"')[1].split(',')[3])
-                jingzhitime = str(jj_jin).split('"')[1].split(',')[4]
-                jingzhizd = 0
-                cha = jingzhi - jingzhip
-                if cha > 0:
-                    jingzhizd = cha / jingzhip
-                else:
-                    jingzhizd = -(-cha / jingzhip)
+                try:
+                    guzhi = compareNum(guzhi, flag=0)
+                    jingzhi = float(str(jj_jin).split('"')[1].split(',')[1])
+                    jingzhip = float(str(jj_jin).split('"')[1].split(',')[3])
+                    jingzhitime = str(jj_jin).split('"')[1].split(',')[4]
+                    jingzhizd = 0
+                    cha = jingzhi - jingzhip
+                    if cha > 0:
+                        jingzhizd = cha / jingzhip
+                    else:
+                        jingzhizd = -(-cha / jingzhip)
+                    jingzhizd = str(round(jingzhizd * 100, 2)) + '%'
+                    jingzhizd = compareNum(jingzhizd, flag=1)
+                    tb_jj.add_row([i, name, guzhi, gutime, jingzhizd, jingzhitime])
+                except:
+                    continue
 
-                jingzhizd = str(round(jingzhizd * 100, 2)) + '%'
-                jingzhizd = compareNum(jingzhizd, flag=1)
-                tb_jj.add_row([i, name, guzhi, gutime, jingzhizd, jingzhitime])
-        
         # 显示
         if platform.system().lower() == 'windows':
             os.system("cls")
