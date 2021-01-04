@@ -117,7 +117,9 @@ if __name__ == '__main__':
                     jingzhizd = compareNum(jingzhizd, flag=1)
                     tb_jj.add_row([i, name, guzhi, gutime, jingzhizd, jingzhitime])
                 except:
-                    continue
+                    jingzhizd = '-'
+                    jingzhizd = '-'
+                    tb_jj.add_row([i, name, guzhi, gutime, jingzhizd, jingzhitime])
 
         # 显示
         if platform.system().lower() == 'windows':
