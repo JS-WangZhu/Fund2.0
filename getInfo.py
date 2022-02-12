@@ -10,7 +10,6 @@ def getGegu(gu_code):
     if gegu_status != 200:
         return False
     allinfo = gegu.text.split('"')[1].split(',')
-    # print(allinfo)
     gegu_name = allinfo[0]
     # 今开
     gegu_jinkai = allinfo[1]
