@@ -4,7 +4,8 @@ import json
 
 # 查询接口
 def getGegu(gu_code):
-    gegu = requests.get('http://hq.sinajs.cn/list=' + gu_code)
+    header = {'Referer':'https://finance.sina.com.cn/'}
+    gegu = requests.get('http://hq.sinajs.cn/list=' + gu_code, headers=header)
     gegu_status = gegu.status_code
     if gegu_status != 200:
         return False
@@ -84,8 +85,9 @@ def getGegu(gu_code):
 
 # res {'fundcode': '003095', 'name': '中欧医疗健康混合A', 'jzrq': '2020-12-17', 'dwjz': '3.2840', 'gsz': '3.2822', 'gszzl': '-0.06', 'gztime': '2020-12-18 15:00'}
 def getJijin(ji_code):
+    header = {'Referer':'https://finance.sina.com.cn/'}
     jijin_gu = requests.get('http://fundgz.1234567.com.cn/js/' + ji_code + '.js?rt=1463558676006')
-    jijin_jin = requests.get('http://hq.sinajs.cn/list=f_'+ji_code)
+    jijin_jin = requests.get('http://hq.sinajs.cn/list=f_'+ji_code, headers=header)
     status = jijin_gu.status_code
     if status != 200:
         return False
